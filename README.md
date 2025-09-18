@@ -170,6 +170,9 @@ This file does not contain all the necessary settings, but many of them. Add add
 ## Monitoring
 
 ### Monitoring Django App on New Relic dashboard
+
+<img width="1910" height="393" alt="Image" src="https://github.com/user-attachments/assets/67cd22e2-d43c-456f-86fa-122e73e0d4ec" />
+
 (Wait a minuite...)
 
 ## For deployment on a server

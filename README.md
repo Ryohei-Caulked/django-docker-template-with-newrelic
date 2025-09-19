@@ -42,102 +42,101 @@ Nothing extra, only the essentials! You can easily add everything else yourself 
 ### For development on your computer
 
 1. Clone the repository to your computer and go to the `django-docker-template` directory:
-```console
-git clone https://github.com/Ryohei-Caulked/django-docker-template-with-newrelic.git
-cd django-docker-template-with-newrelic
-```
+    ```console
+    git clone https://github.com/Ryohei-Caulked/django-docker-template-with-newrelic.git
+    cd django-docker-template-with-newrelic
+    ```
 
 2. Build the Docker container image with Django:
-```console
-docker build -t django-docker-with-newrelic:master .
-```
+    ```console
+    docker build -t django-docker-with-newrelic:master .
+    ```
 
 3. Create the first superuser:
-```console
-docker run -it --rm -v sqlite:/sqlite django-docker-with-newrelic:master python manage.py createsuperuser
-```
+    ```console
+    docker run -it --rm -v sqlite:/sqlite django-docker-with-newrelic:master python manage.py createsuperuser
+    ```
 
 4. Run the Django development server container:
 
-#Linux
-```console
-docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
-```
-#Windows
-```console
-docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v .\website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
-```
+    #Linux
+    ```console
+    docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
+    ```
+    #Windows
+    ```console
+    docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v .\website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
+    ```
 
-
-Now you can go to [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/) in your browser. Go to the Django admin panel and try updating the server code "on the fly".
-Everything works just like if you were running the Django development server outside the container.
-
-> Note that we mount the directory with your source code inside the container, so you can work with the project in your IDE, and changes will be visible inside the container, and the Django development server will restart itself. 
-
-<details markdown="1">
-<summary>SQLite Usage Details</summary>
-
-> Another important point is the use of SQLite3 instead of Postgres, because Postgres is not deployed until Django is run within a Docker Compose environment.
-> In our example, we add a volume named `sqlite`. This data is stored persistently and does not disappear between restarts of the Django development server.
-> However, if you have a second similar project, it would be better to change the volume name from `sqlite` to something else so that the second project uses its own copy of the database. For example:
->
-```console
-docker run -it --rm -p 8000:8000 -v another_sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-template-with-newrelic:master python manage.py runserver 0.0.0.0:8000
-```
-> 
->  To better understand how volumes work in Docker, refer to the official [documentation](https://docs.docker.com/storage/volumes/).
-</details>
-
+    Now you can go to [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/) in your browser. Go to the Django admin panel and try updating the server code "on the fly".
+    Everything works just like if you were running the Django development server outside the container.
+    
+    > Note that we mount the directory with your source code inside the container, so you can work with the project in your IDE, and changes will be visible inside the container, and the Django development server will restart itself. 
+    
+    <details markdown="1">
+    <summary>SQLite Usage Details</summary>
+    
+    > Another important point is the use of SQLite3 instead of Postgres, because Postgres is not deployed until Django is run within a Docker Compose environment.
+    > In our example, we add a volume named `sqlite`. This data is stored persistently and does not disappear between restarts of the Django development server.
+    > However, if you have a second similar project, it would be better to change the volume name from `sqlite` to something else so that the second project uses its own copy of the database. For example:
+    >
+    ```console
+    docker run -it --rm -p 8000:8000 -v another_sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-template-with-newrelic:master python manage.py runserver 0.0.0.0:8000
+    ```
+    > 
+    >  To better understand how volumes work in Docker, refer to the official [documentation](https://docs.docker.com/storage/volumes/).
+    </details>
+    
 5. Run tests with pytest and coverage ✅:
-```console
-docker run --rm django-docker-template-with-newrelic:master ./pytest.sh
-```
-The [pytest.sh](https://github.com/Ryohei-Caulked/django-docker-template-with-newrelic/blob/master/website/pytest.sh) script runs tests using pytest and coverage. As a result, you will see an output like this in the terminal:
-```console
-================== test session starts =====================================
-platform linux -- Python 3.11.7, pytest-7.4.4, pluggy-1.3.0
-django: version: 4.2.9, settings: website.settings (from ini)
-rootdir: /usr/src/website
-configfile: pytest.ini
-plugins: django-4.7.0
-collected 10 items
-
-polls/tests.py .......... [100%]
-
-================== 10 passed in 0.19s ======================================
-Name                                       Stmts   Miss  Cover   Missing
-------------------------------------------------------------------------
-polls/__init__.py                              0      0   100%
-polls/admin.py                                12      0   100%
-polls/apps.py                                  4      0   100%
-polls/migrations/0001_initial.py               6      0   100%
-polls/migrations/0002_question_upload.py       4      0   100%
-polls/migrations/__init__.py                   0      0   100%
-polls/models.py                               20      2    90%   15, 33
-polls/tests.py                                57      0   100%
-polls/urls.py                                  4      0   100%
-polls/views.py                                28      8    71%   39-58
-website/__init__.py                            6      0   100%
-website/settings.py                           52      2    96%   94, 197
-website/urls.py                                6      0   100%
-------------------------------------------------------------------------
-TOTAL                                        199     12    94%
-```
-
-> If you don't want to use pytest (for some reason), you can run the tests without pytest using the command below:
-```console
-docker run --rm django-docker-template-with-newrelic:master python manage.py test
-```
-
+    ```console
+    docker run --rm django-docker-template-with-newrelic:master ./pytest.sh
+    ```
+    The [pytest.sh](https://github.com/Ryohei-Caulked/django-docker-template-with-newrelic/blob/master/website/pytest.sh) script runs tests using pytest and coverage. As a result, you will see an output like this in the terminal:
+    ```console
+    ================== test session starts =====================================
+    platform linux -- Python 3.11.7, pytest-7.4.4, pluggy-1.3.0
+    django: version: 4.2.9, settings: website.settings (from ini)
+    rootdir: /usr/src/website
+    configfile: pytest.ini
+    plugins: django-4.7.0
+    collected 10 items
+    
+    polls/tests.py .......... [100%]
+    
+    ================== 10 passed in 0.19s ======================================
+    Name                                       Stmts   Miss  Cover   Missing
+    ------------------------------------------------------------------------
+    polls/__init__.py                              0      0   100%
+    polls/admin.py                                12      0   100%
+    polls/apps.py                                  4      0   100%
+    polls/migrations/0001_initial.py               6      0   100%
+    polls/migrations/0002_question_upload.py       4      0   100%
+    polls/migrations/__init__.py                   0      0   100%
+    polls/models.py                               20      2    90%   15, 33
+    polls/tests.py                                57      0   100%
+    polls/urls.py                                  4      0   100%
+    polls/views.py                                28      8    71%   39-58
+    website/__init__.py                            6      0   100%
+    website/settings.py                           52      2    96%   94, 197
+    website/urls.py                                6      0   100%
+    ------------------------------------------------------------------------
+    TOTAL                                        199     12    94%
+    ```
+    
+    > If you don't want to use pytest (for some reason), you can run the tests without pytest using the command below:
+    ```console
+    docker run --rm django-docker-template-with-newrelic:master python manage.py test
+    ```
+    
 6. Interactive shell with the Django project environment:
-```console
-docker run -it --rm -v sqlite:/sqlite django-docker-template-with-newrelic:master python manage.py shell
-```
-
+    ```console
+    docker run -it --rm -v sqlite:/sqlite django-docker-template-with-newrelic:master python manage.py shell
+    ```
+    
 7. Start all services locally (Postgres, Gunicorn, Traefik) using docker-compose:
-```console
-docker compose -f docker-compose.debug.yml up
-```
+    ```console
+    docker compose -f docker-compose.debug.yml up
+    ```
 
 Enjoy watching the lines run in the terminal 🖥️   
 And after a few seconds, open your browser at [http://127.0.0.1/admin/](http://127.0.0.1/admin/). The superuser with the login and password `admin/admin` is already created, welcome to the Django admin panel.
@@ -176,50 +175,52 @@ Let's monitor your app on New Relic like this!
 
 1. Create your New Relic account for free
 
-    From [New Relic sign-up page](https://newrelic.com/signup), create your new account for free. Only your Email address is necessary. Then, you have to verify your address by an email from <noreply@newrelic.com>
+   From [New Relic sign-up page](https://newrelic.com/signup), create your new account for free. Only your Email address is necessary. Then, you have to verify your address by an email from <noreply@newrelic.com>
 
 2. Generate and copy the key
 
     At the first view of your account page, click "*Generate and copy license key*". You can copy your license key* to the clip boad.
-    
     (* 40 chars like "*1234567890qwertyuiopasdfghjklZXCVBNM1234*")
 
-<img width="1912" height="545" alt="Image" src="https://github.com/user-attachments/assets/26bfa88d-9c12-4a5e-ad85-8f4d341b9b45" />
+    <img width="1912" height="545" alt="Image" src="https://github.com/user-attachments/assets/26bfa88d-9c12-4a5e-ad85-8f4d341b9b45" />
 
 3. Insert your key to newrelic.ini file
-    Replace *INSERT_YOUR_LICENSE_KEY* to your license key.
+  
+   Replace *INSERT_YOUR_LICENSE_KEY* to your license key.
 
-**/django-docker-template/website/newrelic.ini**
-```diff
-[newrelic]
-app_name = django-with-newrelic
-- license_key = INSERT_YOUR_LICENSE_KEY
-+ license_key = 1234567890qwertyuiopasdfghjklZXCVBNM1234
-```
+    **/django-docker-template/website/newrelic.ini**
+   
+    ```diff
+    [newrelic]
+    app_name = django-with-newrelic
+    - license_key = INSERT_YOUR_LICENSE_KEY
+    + license_key = 1234567890qwertyuiopasdfghjklZXCVBNM1234
+    ```
 
 4. Rebuild the container image to update the key info in newrelic.ini.
-```console
-docker build -t django-docker-with-newrelic:master .
-```
+    ```console
+    docker build -t django-docker-with-newrelic:master .
+    ```
 
 5. Rerun the Django development server container:
 
-    *If the prior container is running, please stop it.
+    *If the prior container is running, please stop it before running this command.
 
-#Linux
-```console
-docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
-```
-#Windows
-```console
-docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v .\website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
-```
+    #Linux
+    ```console
+    docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
+    ```
+    #Windows
+    ```console
+    docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v .\website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
+    ```
+    
 6. Login your New Relic dashboard and open "*APM & Services*". You can access to your app monitoring views.
-
-<img width="1185" height="315" alt="Image" src="https://github.com/user-attachments/assets/b7e07e42-e650-47d1-a00b-3dff6f3778b0" />
-
-<img width="993" height="454" alt="Image" src="https://github.com/user-attachments/assets/d3149bf1-542e-4a73-bc26-1f22e10de4e4" />
-
+    
+    <img width="1185" height="315" alt="Image" src="https://github.com/user-attachments/assets/b7e07e42-e650-47d1-a00b-3dff6f3778b0" />
+    
+    <img width="993" height="454" alt="Image" src="https://github.com/user-attachments/assets/d3149bf1-542e-4a73-bc26-1f22e10de4e4" />
+    
 ## For deployment on a server
 
 #### Prerequisite
@@ -232,28 +233,28 @@ For the Let's Encrypt HTTP challenge you will need:
 #### Steps on a server
 
 1. Clone the repository on your host and go to the `django-docker-template` directory:
-```console
-git clone https://github.com/Ryohei-Caulked/django-docker-template-with-newrelic.git
-cd django-docker-template-with-newrelic
-```
+    ```console
+    git clone https://github.com/Ryohei-Caulked/django-docker-template-with-newrelic.git
+    cd django-docker-template-with-newrelic
+    ```
 
 2. Configure as described in the [Django settings](#django-settings) section or leave everything as is.
 
 3. Run, specifying your domain:
-```console
-MY_DOMAIN=your.domain.com docker compose -f docker-compose.yml -f docker-compose.tls.yml up -d
-```
+    ```console
+    MY_DOMAIN=your.domain.com docker compose -f docker-compose.yml -f docker-compose.tls.yml up -d
+    ```
 
-It will take a few seconds to start the database, migrate, collect static files, and obtain a Let's Encrypt certificate. So wait a little and open https://your.domain.com in your browser. Your server is ready to work 🏆 
-
-> Don't worry about renewing the Let's Encrypt certificate, it will happen automatically.
-
+    It will take a few seconds to start the database, migrate, collect static files, and obtain a Let's Encrypt certificate. So wait a little and open https://your.domain.com in your browser. Your server is ready to work 🏆 
+    
+    > Don't worry about renewing the Let's Encrypt certificate, it will happen automatically.
+    
 4. After running the containers, you can execute [manage.py commands](https://docs.djangoproject.com/en/4.2/ref/django-admin/#available-commands) using this format:
-```console
-docker compose exec django python manage.py check --deploy
-
-docker compose exec django python manage.py shell
-```
+    ```console
+    docker compose exec django python manage.py check --deploy
+    
+    docker compose exec django python manage.py shell
+    ```
 
 ## License
 

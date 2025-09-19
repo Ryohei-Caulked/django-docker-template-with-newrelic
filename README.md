@@ -190,11 +190,12 @@ Let's monitor your app on New Relic like this!
     Replace *INSERT_YOUR_LICENSE_KEY* to your license key.
 
 **/django-docker-template/website/newrelic.ini**
-~~~txt:newrelic.ini
+```diff
 [newrelic]
 app_name = django-with-newrelic
-license_key = 1234567890qwertyuiopasdfghjklZXCVBNM1234
-~~~
+- license_key = INSERT_YOUR_LICENSE_KEY
++ license_key = 1234567890qwertyuiopasdfghjklZXCVBNM1234
+```
 
 4. Rebuild the container image to update the key info in newrelic.ini.
 ```console

@@ -49,23 +49,23 @@ cd django-docker-template-with-newrelic
 
 2. Build the Docker container image with Django:
 ```console
-docker build -t django-docker-template-with-newrelic:master .
+docker build -t django-docker-with-newrelic:master .
 ```
 
 3. Create the first superuser:
 ```console
-docker run -it --rm -v sqlite:/sqlite django-docker-template-with-newrelic:master python manage.py createsuperuser
+docker run -it --rm -v sqlite:/sqlite django-docker-with-newrelic:master python manage.py createsuperuser
 ```
 
 4. Run the Django development server container:
 
 ```console
 #Linux
-docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-template-with-newrelic:master python manage.py runserver 0.0.0.0:8000
+docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
 ```
 ```console
 #Windows
-docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v .\website:/usr/src/website django-docker-template:master python manage.py runserver 0.0.0.0:8000
+docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v .\website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
 ```
 
 
@@ -171,9 +171,32 @@ This file does not contain all the necessary settings, but many of them. Add add
 
 ### Monitoring Django App on New Relic dashboard
 
+Let's monitor your app on New Relic like this!
 <img width="1910" height="393" alt="Image" src="https://github.com/user-attachments/assets/67cd22e2-d43c-456f-86fa-122e73e0d4ec" />
 
-(Wait a minuite...)
+1. Create your New Relic account for free 
+
+    From [New Relic sign-up page](https://newrelic.com/signup), create your new account for free. Only your Email address is necessary. Then, you have to verify your address by an email from <noreply@newrelic.com>
+
+2. Generate and copy the key
+
+    At the first view of your account page, click "*Generate and copy license key*". You can copy your license key* to the clip boad.
+    
+    (* 40 chars like "*1234567890qwertyuiopasdfghjklZXCVBNM1234*")
+
+<img width="1912" height="545" alt="Image" src="https://github.com/user-attachments/assets/26bfa88d-9c12-4a5e-ad85-8f4d341b9b45" />
+
+3. Insert your key to newrelic.ini file
+    Replace *INSERT_YOUR_LICENSE_KEY* to your license key.
+
+**/django-docker-template/website/newrelic.ini**
+~~~txt:newrelic.ini
+@django-docker-template/website/newrelic.ini
+
+[newrelic]
+app_name = django-with-newrelic
+license_key = 1234567890qwertyuiopasdfghjklZXCVBNM1234
+~~~
 
 ## For deployment on a server
 

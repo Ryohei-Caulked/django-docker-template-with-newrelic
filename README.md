@@ -59,12 +59,12 @@ docker run -it --rm -v sqlite:/sqlite django-docker-with-newrelic:master python 
 
 4. Run the Django development server container:
 
-```console
 #Linux
+```console
 docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
 ```
-```console
 #Windows
+```console
 docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v .\website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
 ```
 
@@ -174,7 +174,7 @@ This file does not contain all the necessary settings, but many of them. Add add
 Let's monitor your app on New Relic like this!
 <img width="1910" height="393" alt="Image" src="https://github.com/user-attachments/assets/67cd22e2-d43c-456f-86fa-122e73e0d4ec" />
 
-1. Create your New Relic account for free 
+1. Create your New Relic account for free
 
     From [New Relic sign-up page](https://newrelic.com/signup), create your new account for free. Only your Email address is necessary. Then, you have to verify your address by an email from <noreply@newrelic.com>
 
@@ -191,12 +191,33 @@ Let's monitor your app on New Relic like this!
 
 **/django-docker-template/website/newrelic.ini**
 ~~~txt:newrelic.ini
-@django-docker-template/website/newrelic.ini
-
 [newrelic]
 app_name = django-with-newrelic
 license_key = 1234567890qwertyuiopasdfghjklZXCVBNM1234
 ~~~
+
+4. Rebuild the container image to update the key info in newrelic.ini.
+```console
+docker build -t django-docker-with-newrelic:master .
+```
+
+5. Rerun the Django development server container:
+
+    *If the prior container is running, please stop it.
+
+#Linux
+```console
+docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v $(pwd)/website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
+```
+#Windows
+```console
+docker run -it --rm -p 8000:8000 -v sqlite:/sqlite -v .\website:/usr/src/website django-docker-with-newrelic:master python manage.py runserver 0.0.0.0:8000
+```
+6. Login your New Relic dashboard and open "*APM & Services*". You can access to your app monitoring views.
+
+<img width="1185" height="315" alt="Image" src="https://github.com/user-attachments/assets/b7e07e42-e650-47d1-a00b-3dff6f3778b0" />
+
+<img width="993" height="454" alt="Image" src="https://github.com/user-attachments/assets/d3149bf1-542e-4a73-bc26-1f22e10de4e4" />
 
 ## For deployment on a server
 
